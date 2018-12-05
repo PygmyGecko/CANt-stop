@@ -8,7 +8,7 @@ import sys, os
 
 timestamp = time()
 
-
+#initialize CAN device
 try:
 	dev = cantact.CantactDev("/dev/ttyACM0") # Connect to CANable
 except Exception:
@@ -18,15 +18,17 @@ except Exception:
 dev.set_bitrate(500000) # Set the bitrate to a 500k baud
 dev.start() # Go on the bus
 
+#initialize accel/gyro
+try:
+    sensor = mpu6050(0x68)
+except Exception:
+    print("MPU6050 accel/gyro not found")
+    exit()
 
 file = open('./logs/log' + str(len(os.listdir('./logs'))), 'w+') # Create log file to write to
 
 
-sensor = mpu6050(0x68)
-
-
 count = 0
-
 while True:
     count += 1
     
